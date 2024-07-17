@@ -1,0 +1,71 @@
+{{ define "scan.tmpl" }}
+{{ template "header.tmpl" . }}
+<link rel="stylesheet" href="/static/scan.css">
+<script src="/static/scan.js"></script>
+
+{{ with .Scan }}
+
+<h1>Results for {{ .ScanName }}</h1>
+<div id="scan-meta">
+	<div>Ruleset:&nbsp; {{ .Ruleset.Name }}</div>
+	<div>Filename: {{ .UploadName }}</div>
+	<div>Uploaded: {{ .UploadDate.Format "2006-01-02 15:04:05" }}</div>
+</div>
+
+<div>
+	{{ if eq .Error "" }}<button class="custom-button" onclick="window.location.href = window.location.pathname + '/json';">Raw JSON</button>{{ end }}
+
+	<button class="custom-button" onclick="if (confirm('Are you sure?')) { fetch('/scan/{{ .ID }}', { method: 'DELETE' }).then(() => window.location.href = '/'); }">Delete Scan</button>
+</div>
+
+{{ if ne .Error "" }}<div class="scan-error">
+	<h2>Error</h2>
+	<p>{{ .Error }}</p>
+</div>{{ end }}
+
+{{ if eq .Error "" }}<h2>Findings</h2>
+{{ if not .Results }}<p>None</p>{{ else }}
+
+<input type="text" class="custom-button" id="scan-results-search-input" placeholder="Search...">
+<button class="custom-button" id="scan-results-filter-toggle">Filter</button>
+
+<div id="scan-results-filters" class="custom-button" style="display: none;">
+	<div class="scan-results-filter">
+		<div>Filter by vulnerability class</div>
+		<ul class="scan-result-filter-list" id="scan-results-filter-vulnclass"></ul>
+	</div>
+	<div class="scan-results-filter">
+		<div>Filter by file</div>
+		<ul class="scan-result-filter-list" id="scan-results-filter-path"></ul>
+	</div>
+</div>
+
+<div id="scan-results">
+{{ range .Results }}<div class="scan-result">
+	<div class="scan-result-data">
+		<h3 class="scan-result-data-vulnclass">{{ range $i, $vc := .Extra.Metadata.VulnerabilityClass.Value }}{{ $vc }}{{ if $i }},{{ end }}{{ end }}</h3>
+		<p class="scan-result-data-path">{{ .Path }}</p>
+		<p class="scan-result-data-message">{{ .Extra.Message }}</div></p>
+		<pre><code>{{ .Extra.Lines }}</code></pre>
+		<details>
+			<summary>More information</summary>
+			<!--<p>Confidence: {{ .Extra.Metadata.Confidence }}</p>
+			<p>Impact: {{ .Extra.Metadata.Impact }}</p>
+			<p>Likelihood: {{ .Extra.Metadata.Likelihood }}</p>-->
+			<p>CWEs:</p>
+			<ul>
+				{{ range .Extra.Metadata.Cwe.Value }}<li class="scan-result-data-cwe">{{ . }}</li>{{ end }}
+			</ul>
+			<p>References:</p>
+			<ul>
+				{{ range .Extra.Metadata.References.Value }}<li><a href="{{ . }}" target="_blank" rel="noreferrer">{{ . }}</a></li>{{ end }}
+			</ul>
+		</details>
+	</div><!-- end range .Results -->{{ end }}
+</div>
+</div><!-- end not .Results -->{{ end }}<!-- end eq .Error "" -->{{ end }}
+
+<!-- end with .Scan -->{{ end }}
+
+{{ template "footer.tmpl" . }}
+{{ end }}

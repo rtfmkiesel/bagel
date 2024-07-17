@@ -1,0 +1,11 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+	include_ext = ["go", "tmpl", "css", "js"]
+
+[misc]
+	clean_on_exit = true
+
+[screen]
+	clear_on_rebuild = true

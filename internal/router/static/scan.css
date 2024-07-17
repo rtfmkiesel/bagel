@@ -1,0 +1,58 @@
+#scan-meta {
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	color: var(--foreground-color-dull);
+	margin: 1rem auto;
+}
+
+#scan-results {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 1rem auto;
+}
+
+#scan-results div:not(:last-child) {
+	margin-bottom: 1rem;
+}
+
+#scan-results-filters {
+	margin: 1rem 0;
+}
+
+.scan-results-filter-element {
+	color: var(--foreground-color-dull);
+	text-decoration: none;
+}
+
+.scan-results-filter-element:hover {
+	color: var(--foreground-color);
+	text-decoration: underline;
+}
+
+.scan-results-filter-element-selected {
+	color: var(--foreground-color);
+	text-decoration: underline;
+}
+
+.scan-result {
+	width: 100%;
+	box-sizing: border-box;
+
+	color: var(--foreground-color);
+	background-color: var(--background-color);
+
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	padding: 1rem;
+}
+
+.scan-result-data h3 {
+	margin: 0;
+}
+
+.scan-result-data-path {
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	margin-top: 0;
+}

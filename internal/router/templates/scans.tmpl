@@ -1,0 +1,37 @@
+{{ define "scans.tmpl" }}
+{{ template "header.tmpl" . }}
+<link rel="stylesheet" href="/static/scans.css">
+<script src="/static/scans.js"></script>
+
+<h1>New Scan</h1>
+<form id="scan-form" action="/scan/new" method="POST" enctype="multipart/form-data">
+	<div class="custom-button" id="scan-form-file-drop"><p>Drag & drop your file or click here</p></div>
+	<input type="file" name="file" id="scan-form-file-input" hidden required>
+	<div id="scan-form-button-row">
+		<input class="custom-button" type="text" name="name" id="scan-form-name-input" placeholder="Name" required>
+		<select class="custom-button" name="ruleset" id="scan-form-ruleset-input" required>
+		<option value="" hidden disabled selected>Ruleset</option>
+		{{ range .Rulesets }}<option value="{{ .Name }}">{{ .Name }}</option>{{ end }}
+		</select>
+		<button type="submit" class="custom-button" id="scan-form-start-button" disabled>Start</button>
+	</div>
+</form>
+
+{{ if .Scans }}
+<h2>Past Scans</h2>
+<div id="scan-list">
+{{ range .Scans }}<a href="/scan/{{ .ID }}" class="scan-list-entry{{ if not .Finished }} scan-unfinished {{ end }}{{ if ne .Error "" }} scan-error {{ end }}">
+		<h3>{{ .ScanName }}</h3>
+		<div>
+			<div>Status:&nbsp;&nbsp; {{ if ne .Error "" }}Error{{ else if not .Finished }}Scanning, please wait...{{ else }}Finished{{ end }}</div>
+			<div>Ruleset:&nbsp; {{ .Ruleset.Name }}</div>
+			<div>Filename: {{ .UploadName }}</div>
+			<div>Uploaded: {{ .UploadDate.Format "2006-01-02 15:04:05" }}</div>
+		</div>
+	</a>{{ end }}
+</div>
+{{ end }}
+
+{{ template "footer.tmpl" . }}
+
+{{ end }}
