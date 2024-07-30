@@ -34,7 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	fileInput.addEventListener("change", () => {
 		if (fileInput.files.length > 0) {
 			// Only use the first file
-			fileDrop.querySelector("p").textContent = fileInput.files[0].name;
+			var filename = fileInput.files[0].name;
+			fileDrop.querySelector("p").textContent = filename;
+			nameInput.value = filename;
 			updateButtonState();
 		}
 	});
@@ -50,7 +52,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Listen for input changes
 	nameInput.addEventListener("input", updateButtonState);
-	rulesetInput.addEventListener("change", updateButtonState);
+	rulesetInput.addEventListener("change", 
+		// Add the ruleset to the scan name just before the last dot
+		function() {
+			const ruleset = rulesetInput.value;
+			const name = nameInput.value;
+			const lastDotIndex = name.lastIndexOf(".");
+			if (lastDotIndex !== -1) {
+				nameInput.value = name.substring(0, lastDotIndex) + "_" + ruleset + name.substring(lastDotIndex);
+			}
+			updateButtonState();
+		},
+	);
 
 	// Prevent unfinished scans from being clicked
 	document.querySelectorAll("a.scan-unfinished").forEach((link) => {
