@@ -19,7 +19,7 @@ func main() {
 
 	router.Start(db)
 
-	if semgrep.WaitForShutdown() {
+	if router.WaitForShutdown() {
 		if err := router.Stop(); err != nil {
 			logger.Fatal(err)
 		}

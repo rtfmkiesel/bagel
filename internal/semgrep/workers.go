@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/signal"
 	"strings"
 	"sync"
-	"syscall"
 
 	"gorm.io/gorm"
 )
@@ -137,16 +135,4 @@ func StopWorkers() {
 	wgJobs.Wait()
 
 	logger.Info("Workers stopped")
-}
-
-// WaitForShutdown waits for a stop signal like SIGINT or SIGTERM, returns true when received
-func WaitForShutdown() bool {
-	// Set up the channel for the stop signal
-	chanSignal := make(chan os.Signal, 1)
-	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
-
-	<-chanSignal // Waits here until a stop signal is received
-	logger.Info("Received stop signal")
-
-	return true
 }
