@@ -10,9 +10,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		"scan-results-filter-toggle"
 	);
 	filterToggleButton.addEventListener("click", function () {
-		const filterDiv = document.getElementById("scan-results-filters");
-		filterDiv.style.display =
-			filterDiv.style.display === "block" ? "none" : "block";
+		toggleFilterList();
+	});
+	document.addEventListener("keydown", function (event) {
+		if (event.key === "F" && event.shiftKey) {
+			toggleFilterList();
+		}
+	});
+
+	// Add filter reset button
+	const filterResetButton = document.getElementById(
+		"scan-results-filter-reset"
+	);
+	filterResetButton.addEventListener("click", function () {
+		document.querySelectorAll(".scan-results-filter-element-selected").forEach((el) => {
+			el.classList.remove("scan-results-filter-element-selected");
+		});
+		filterResultsWithFilters();
 	});
 
 	// Get all vuln classes and paths, populate the filter list
@@ -21,6 +35,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Add filter logic to filter elements
 	addFilterListeners();
 });
+
+// Toggle the filter list
+function toggleFilterList() {
+	const filterDiv = document.getElementById("scan-results-filters");
+	filterDiv.style.display =
+		filterDiv.style.display === "block" ? "none" : "block";
+}
 
 // Filter results based on search input
 function filterResultsWithSearch() {

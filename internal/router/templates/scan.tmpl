@@ -13,9 +13,9 @@
 </div>
 
 <div>
-	{{ if eq .Error "" }}<button class="custom-button" onclick="window.location.href = window.location.pathname + '/json';">Raw JSON</button>{{ end }}
+	{{ if eq .Error "" }}<button class="custom-button" onclick="window.location.href = window.location.pathname + '/json';" title="Show the raw Semgrep output as JSON">Raw JSON</button>{{ end }}
 
-	<button class="custom-button" onclick="if (confirm('Are you sure?')) { fetch('/scan/{{ .ID }}', { method: 'DELETE' }).then(() => window.location.href = '/'); }">Delete Scan</button>
+	<button class="custom-button" onclick="if (confirm('Are you sure?')) { fetch('/scan/{{ .ID }}', { method: 'DELETE' }).then(() => window.location.href = '/'); }" title="Deletes the scan">Delete Scan</button>
 </div>
 
 {{ if ne .Error "" }}<div class="scan-error">
@@ -27,7 +27,8 @@
 {{ if not .Results }}<p>None</p>{{ else }}
 
 <input type="text" class="custom-button" id="scan-results-search-input" placeholder="Search...">
-<button class="custom-button" id="scan-results-filter-toggle">Filter</button>
+<button class="custom-button" id="scan-results-filter-toggle" title="Show/Hide the filter. SHIFT+F">Filter</button>
+<button class="custom-button" id="scan-results-filter-reset" title="Reset the filter">Reset</button>
 
 <div id="scan-results-filters" class="custom-button" style="display: none;">
 	<div class="scan-results-filter">
